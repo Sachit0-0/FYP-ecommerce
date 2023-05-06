@@ -262,6 +262,23 @@ class CustomerProfileView(TemplateView):
         context["orders"] = orders
         return context
 
+class CustomerOrderDetailView(DetailView):
+    template_name = "customerorderdetail.html"
+    model = Order
+    context_object_name = "ord_obj"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists():
+            order_id = self.kwargs["pk"]
+            order = Order.objects.get(id=order_id)
+            if request.user.customer != order.cart.customer:
+                return redirect("ecomapp:customerprofile")
+        else:
+            return redirect("/login/?next=/profile/")
+        return super().dispatch(request, *args, **kwargs)
+
+
+
 class SearchView(TemplateView):
     template_name = "search.html"
 
