@@ -8,6 +8,8 @@ from django.urls import reverse_lazy, reverse
 from django.db.models import Q
 import requests
 
+
+
 class EcomMixin(object):
     def dispatch(self, request, *args, **kwargs):
         cart_id = request.session.get("cart_id")
