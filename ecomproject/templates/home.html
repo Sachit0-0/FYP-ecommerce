@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Bike{% endblock title %}
 {% block body %} 
 
 
 <!-- the-imagesection -->
 
-<header class="background-header">
+<header class="background-header mt-5">
     <section class="container">
       <div class="row align-items-center">
         <div class="col-md-5">
           <section class="header-text">
             <h1 class="text-light" >Grab up to 50% off on Selected Bikes</h1>
-            <button type="button"  class="btn btn-success"><a href="bike">Buy Now</a></button>
+            
+            <a class="btn btn-success" href="">Buy Now</a>
           </section>
         </div>
         <div class="col-md-7">
@@ -24,7 +26,7 @@
   </header>
 
 
-  <div class="the-top py-1">
+  {% comment %} <div class="the-top py-1">
     <section class="container">
       <div class="d-flex justify-content-around">
         <div class="">
@@ -42,7 +44,7 @@
       </div>
     </section>
   </div>
-  
+   {% endcomment %}
 
   <h5>
     {% if request.user.customer %}
@@ -66,24 +68,34 @@
   <h4>{{cat.title}}</h4><hr>
   <div class="row">
     {%for p in product_list%}
-      <div class="col-md-3">
-        
-          <div class="m-4">
-          
-              <h4 >{{p.title}}</h4>
-              <img src="{{p.image.url}}"  alt="" class="img-fluid" style="height: 150px; object-fit: cover;" alt="">
-              <p class="mt-3">Price: <strike>Rs. {{p.marked_price}}</strike><br> Rs. {{p.selling_price}}</p>
-              <div class="btn-group" role="group" aria-label="Basic example">
-              <a href="{% url 'ecomapp:addtocart' p.id %}" class="btn btn-custom mt-2">Add To Cart</a>
-              <br>
-              <a href="{% url 'ecomapp:productdetail' p.slug %}" class="btn btn-custom mt-2">See More</a>
-        
-                </div>
-          </div>
+    <div class="card border-success mb-3 m-3 col-md-3 " style="max-width: 18rem;">
+      <div class="m-4">
+          <h4 >{{p.title}}</h4>
+          <hr>
+          <img src="{{p.image.url}}"  alt="" class="img-fluid" style="height: 150px; object-fit: contain;" alt="">
+          <p class="mt-3">Price: <strike>Rs. {{p.marked_price}}</strike><br> Rs. {{p.selling_price}}</p>
+          <div >
+            <a href="{% url 'ecomapp:addtocart' p.id %}" class="btn btn-custom mt-2">Add To Cart</a>
+            <a href="{% url 'ecomapp:productdetail' p.slug %}" class="btn btn-custom mt-2">See More</a>
+            </div>
       </div>
+  </div>
       {% endfor %}
   </div>
 
 </div>
 
+<style>
+  .card:hover {
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+  }
+  .btn-custom {
+      background-color: #28a745;
+      color: white;
+      border: none;
+  }
+  .btn-custom:hover {
+      background-color: #218838;
+  }
+</style>
 {% endblock body %}
