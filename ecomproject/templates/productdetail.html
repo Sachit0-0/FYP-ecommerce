@@ -1,56 +1,73 @@
 {% extends 'base.html' %}
 {% block title %}ProductDetail{% endblock title %}
 {% block body %} 
-<div class="container">
-    <h3>Product: {{product.title}}</h3><hr>
-    <div class="row">
-        <div class="col-md-4">
-            <img src="{{product.image.url}}" alt="" class="img-fluid">
-            <div class="row">
-                {% for pi in product.productimage_set.all %}
-                <div class="col-md-4 p-3">
-                    <a href="{{pi.image.url}}" target="_blank">
-                        <img src="{{pi.image.url}}" class="img-fluid" style="height: 100px; object-fit: contain;" alt="">
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-5">
+      <div class="card">
+        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}">
+        <div class="card-body">
+          <div class="row">
+            {% for pi in product.productimage_set.all %}
+              <div class="col-md-4 p-2">
+                <a href="{{ pi.image.url }}" target="_blank">
+                  <img src="{{ pi.image.url }}" class="img-fluid" style="height: 100px; object-fit: contain;" alt="">
+                </a>
+              </div>
+            {% endfor %}
+          </div>
         </div>
-        <div class="col-md-8">
-            <h4>{{product.title}} (Viewed {{product.view_count}} times)</h4>
-            <h5>Category: {{product.category}}</h5>
-            <h5>Price: <strike>Rs. {{product.marked_price}}</strike> Rs. {{product.selling_price}}</h5>
-            <a href="{% url 'ecomapp:addtocart' product.id %}" class="btn btn-info">Add To Cart</a>
-            <hr>
-            <p class="text-info">Warranty: {{product.warranty}}</p>
-            <hr>
-            <p>{{product.description}}</p>
-            <hr><hr>
+      </div>
+    </div>
 
-            <h2>Reviews</h2>
-{% if reviews %}
-  <ul>
-    {% for review in reviews %}
-      <li>
-        <strong>{{ review.user.username }}:</strong>
-        {{ review.title }}<br>
-        {{ review.text }}<br>
-        Rating: {{ review.rating }}<br>
-        Created at: {{ review.created_at }}<br>
-        Updated at: {{ review.updated_at }}<br>
-      </li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>No reviews yet.</p>
-{% endif %}
+    <div class="col-md-7">
+      <h2 class="mb-4">{{ product.title }}</h2>
+      <p class="lead mb-0">Category: {{ product.category }}</p>
+      <p class="lead mb-0">Price: <strike>Rs. {{ product.marked_price }}</strike> Rs. {{ product.selling_price }}</p>
+      <p class="text-info mb-3">Warranty: {{ product.warranty }}</p>
+      <p class="card-text">{{ product.description }}</p>
+      <hr>
 
-{% if user.is_authenticated %}
-<a href="{% url 'ecomapp:add_review' slug=product.slug %}">Add a review</a>
+      <h4 class="mb-4">Reviews</h4>
 
-{% else %}
-  <p>Please <a href="{% url 'ecomapp:customerlogin' %}">log in</a> to add a review.</p>
-{% endif %}
+      {% if reviews %}
+        <div class="list-group mb-3">
+          {% for review in reviews %}
+            <div class="list-group-item">
+              <h5 class="mb-0">{{ review.title }}</h5>
+              <p class="mb-0">
+                <strong>{{ review.user.username }}:</strong>
+                {{ review.text }}
+              </p>
+              <small class="text-muted">
+                Rating: {{ review.rating }}
+                <br>
+                Created at: {{ review.created_at }}
+                <br>
+                Updated at: {{ review.updated_at }}
+              </small>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No reviews yet.</p>
+      {% endif %}
 
+      {% if user.is_authenticated %}
+        <a href="{% url 'ecomapp:add_review' slug=product.slug %}" class="btn btn-primary">Add a review</a>
+      {% else %}
+        <p>Please <a href="{% url 'ecomapp:customerlogin' %}">log in</a> to add a review.</p>
+      {% endif %}
+
+      <hr>
+      <a href="{% url 'ecomapp:addtocart' product.id %}" class="btn btn-success">
+        Add to Cart
+      </a>
+      {% comment %} <a href="{% url 'ecomapp:shop' %}" class="btn btn-secondary ml-2">
+        Continue Shopping
+      </a> {% endcomment %}
+    </div>
+  </div>
+</div>
 
 {% endblock body %}

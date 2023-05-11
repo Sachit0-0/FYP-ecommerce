@@ -24,101 +24,50 @@
 
 
     <!-- this is nav section -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow mb-5">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/#">
-      <img src="{% static 'image/logo.png' %}" width="80" alt="MoBi Logo" />
-    </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavDropdown"
-          aria-controls="navbarNavDropdown"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-          <ul class="navbar-nav w-100 justify-content-evenly p-0">
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Categories
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'ecomapp:mycart' %}">Cart</a></li>
-                <li><a class="dropdown-item" href="{% url 'ecomapp:checkout' %}">Check out orders </a></li>
-                <li>
-                  <a class="dropdown-item" href="admin-home/">Admin</a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/all-products/">Products</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">About Us</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/my-cart/">Cart</a>
-            </li>
-            <li class="nav-item">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow mb-5">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/#">
+            <img src="{% static 'image/logo.png' %}" width="80" alt="MoBi Logo" />
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <nav class="navbar-nav w-100 justify-content-evenly">
+              <a class="nav-link" href="/#" aria-label="Home">Home</a>
+              <a class="nav-link" href="/all-products/" aria-label="Products">Products</a>
+              <a class="nav-link" href="/about/" aria-label="About Us">About Us</a>
+              <a class="nav-link" href="/my-cart/" aria-label="Cart">Cart</a>
               <form class="d-flex" role="search" action="{% url 'ecomapp:search' %}" method="GET">
-                <input
-                  name="keyword"
-                  class="form-control me-2"
-                  
-                  type="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                />
-                <button class="btn btn-outline-success" type="submit">
-                  Search
-                </button>
-           - -
-
-                {% if request.user.customer %}
-              <li class="nav-item dropdown">
-                <a
-                  class="btn btn-success"
-                  href="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                
-                {{request.user.username}}(active)
+                <input name="keyword" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
+              <div class="nav-item dropdown">
+                <a class="btn btn-success dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {% if request.user.customer %}
+                  {{ request.user.username }} (active)
+                  {% else %}
+                  Register/Login
+                  {% endif %}
                 </a>
                 <ul class="dropdown-menu">
-                 
-                 <a class="dropdown-item" href="{% url 'ecomapp:customerprofile' %}">My Profile</a> 
-                  <a class="dropdown-item" href="{% url 'ecomapp:customerlogout' %}">Logout</a> 
+                  {% if request.user.customer %}
+                  <li><a class="dropdown-item" href="{% url 'ecomapp:customerprofile' %}" aria-label="My Profile">My Profile</a></li>
+                  <li><a class="dropdown-item" href="{% url 'ecomapp:customerlogout' %}" aria-label="Logout">Logout</a></li>
                   {% else %}
-                  <a class="btn btn-success" href="{% url 'ecomapp:customerregistration' %}">Register</a>
-                   <a class="btn btn-success" href="{% url 'ecomapp:customerlogin' %}">Login</a> 
+                  <li><a class="dropdown-item" href="{% url 'ecomapp:customerregistration' %}" aria-label="Register">Register</a></li>
+                  <li><a class="dropdown-item" href="{% url 'ecomapp:customerlogin' %}" aria-label="Login">Login</a></li>
+                  <li><a class="dropdown-item" href="{% url 'ecomapp:adminhome' %}" aria-label="Admin">Admin</a></li>
                   {% endif %}
                 </ul>
-              </li>
-
-
-
-              </form>
-            </li>
-          </ul>
+              </div>
+            </nav>
+          </div>
         </div>
-     
-    </nav>
- 
+      </nav>
+    </header>
+    
 
     {% block body %}{% endblock body %}
 

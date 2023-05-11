@@ -31,12 +31,31 @@ class HomeView(EcomMixin,TemplateView):
         context['product_list'] = Product.objects.all()
         return context
 
+from django.shortcuts import get_object_or_404
+
 class AllProductsView(EcomMixin, TemplateView):
     template_name = "allproducts.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # Get all categories and add them to the context
         context['allcategories'] = Category.objects.all()
+
+        # Check if a category filter has been applied
+        category_slug = self.request.GET.get('category')
+        if category_slug:
+            # If a category filter has been applied, filter the products accordingly
+            category = get_object_or_404(Category, slug=category_slug)
+            products = Product.objects.filter(category=category)
+            context['selected_category'] = category
+        else:
+            # If no category filter has been applied, show all products
+            products = Product.objects.all()
+
+        # Add the products to the context
+        context['products'] = products
+
         return context
 
 
