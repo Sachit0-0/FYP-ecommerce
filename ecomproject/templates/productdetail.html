@@ -27,12 +27,30 @@
             <p>{{product.description}}</p>
             <hr><hr>
 
-            <h4>Review</h4>
+            <h2>Reviews</h2>
+{% if reviews %}
+  <ul>
+    {% for review in reviews %}
+      <li>
+        <strong>{{ review.user.username }}:</strong>
+        {{ review.title }}<br>
+        {{ review.text }}<br>
+        Rating: {{ review.rating }}<br>
+        Created at: {{ review.created_at }}<br>
+        Updated at: {{ review.updated_at }}<br>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No reviews yet.</p>
+{% endif %}
 
-        </div>
-    </div>
+{% if user.is_authenticated %}
+<a href="{% url 'ecomapp:add_review' slug=product.slug %}">Add a review</a>
 
-</div>
+{% else %}
+  <p>Please <a href="{% url 'ecomapp:customerlogin' %}">log in</a> to add a review.</p>
+{% endif %}
 
 
 {% endblock body %}

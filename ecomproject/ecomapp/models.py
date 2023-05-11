@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 
@@ -41,10 +42,17 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products')
     view_count = models.PositiveIntegerField(default=0)
     warranty = models.CharField(max_length=300, null=True, blank=True)
+    def get_rating(self):
+        reviews = self.reviews.all()
+        if reviews:
+            return sum([review.rating for review in reviews])/len(reviews)
+        return 0
 
     def __str__(self):
-     return self.title
-    
+        return self.title
+
+    class Meta:
+        ordering = ['-id']
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -111,4 +119,17 @@ class Order(models.Model):
         return "Order: " +str(self.id)
 
 
+class Review(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    text = models.TextField(max_length=1000)
+    rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = ('product', 'user')
+
+    def __str__(self):
+        return f'Review for {self.product.title} by {self.user.username}'

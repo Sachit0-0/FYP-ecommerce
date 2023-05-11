@@ -7,8 +7,9 @@ from .forms import CheckoutForm, CustomerRegistrationForm, CustomerLoginForm, Pr
 from django.urls import reverse_lazy, reverse
 from django.db.models import Q
 import requests
-
-
+from django.shortcuts import render, get_object_or_404
+from .forms import ReviewForm
+from django.contrib import messages
 
 class EcomMixin(object):
     def dispatch(self, request, *args, **kwargs):
@@ -39,17 +40,55 @@ class AllProductsView(EcomMixin, TemplateView):
         return context
 
 
-class ProductDetailView(EcomMixin, TemplateView):
-    template_name = "productdetail.html"
+def productdetail(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    reviews = product.reviews.all()
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        url_slug = self.kwargs['slug']
-        product = Product.objects.get(slug=url_slug)
-        product.view_count += 1
-        product.save()
-        context['product'] = product
-        return context
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = product
+            review.user = request.user
+            review.save()
+            return redirect('product', slug=slug)
+    else:
+        form = ReviewForm()
+
+    context = {'product': product, 'reviews': reviews, 'form': form}
+    return render(request, 'productdetail.html', context)
+
+
+def add_review(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+
+    # check if the user has already added a review for this product
+    existing_review = Review.objects.filter(product=product, user=request.user).first()
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = product
+            review.user = request.user
+            if existing_review:
+                # update the existing review
+                existing_review.rating = review.rating
+                existing_review.text = review.text
+                existing_review.save()
+            else:
+                # create a new review
+                review.save()
+            messages.success(request, 'Your review has been submitted successfully.')
+            return redirect('ecomapp:productdetail', slug=slug)
+    else:
+        form = ReviewForm(instance=existing_review or None)
+
+    return render(request, 'add_review.html', {'form': form})
+
+
+
+
 
 class AddToCartView(EcomMixin,TemplateView):
     template_name = "addtocart.html"
