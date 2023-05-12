@@ -126,7 +126,7 @@ class AddToCartView(EcomMixin,TemplateView):
             this_product_in_cart = cart_obj.cartproduct_set.filter(
                 product=product_obj)
 
-            # item already exists in cart
+            # item already exists in cartss
             if this_product_in_cart.exists():
                 cartproduct = this_product_in_cart.last()
                 cartproduct.quantity += 1
