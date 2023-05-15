@@ -34,7 +34,8 @@
                 <li style="color: red;">{{error}}</li>
                 {% endif %}
             </form>
-            <p>Forgot Password?<br><a href="">Reset now.</a></p>
+            
+            <p>Forgot Password?<a href="{% url 'ecomapp:passworforgot' %}">Reset now.</a></p>
             <p> or dont have account? <a href="{% url 'ecomapp:customerregistration' %}{% if request.GET.next %}?next={{request.GET.next}}{% endif %}">Register here</a></p>
         </div>
     </div>

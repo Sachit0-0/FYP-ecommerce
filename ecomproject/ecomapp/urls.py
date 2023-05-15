@@ -12,7 +12,7 @@ urlpatterns = [
     path("about/", AboutView.as_view(), name="about"),
     path("contact-us/", ContactView.as_view(), name="contact"),
     path("all-products/", AllProductsView.as_view(), name="allproducts"),
-   path('product/<slug:slug>/', views.productdetail, name='productdetail'),
+   path('product/<slug:slug>/', productdetail, name='product_detail'),
 path('product/<slug:slug>/add_review/', views.add_review, name='add_review'),
 
     
@@ -33,7 +33,9 @@ path('product/<slug:slug>/add_review/', views.add_review, name='add_review'),
 
     path("search/", SearchView.as_view(), name="search"),
 
-
+    path("forgot-password/", PasswordForgotView.as_view(), name="passworforgot"),
+    path("password-reset/<email>/<token>/",
+         PasswordResetView.as_view(), name="passwordreset"),
    # Admin page haruu
 
     path("admin-login/", AdminLoginView.as_view(), name="adminlogin"),

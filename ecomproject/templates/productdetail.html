@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
+
+{% load static %}
+
 {% block title %}ProductDetail{% endblock title %}
+
 {% block body %} 
 <div class="container mt-4">
   <div class="row">
@@ -22,52 +26,84 @@
 
     <div class="col-md-7">
       <h2 class="mb-4">{{ product.title }}</h2>
-      <p class="lead mb-0">Category: {{ product.category }}</p>
-      <p class="lead mb-0">Price: <strike>Rs. {{ product.marked_price }}</strike> Rs. {{ product.selling_price }}</p>
-      <p class="text-info mb-3">Warranty: {{ product.warranty }}</p>
+      <div class="row mb-3">
+        <div class="col-6">
+          <p class="lead mb-0">Category:</p>
+          <p class="lead">{{ product.category }}</p>
+        </div>
+        <div class="col-6">
+          <p class="lead mb-0">Price:</p>
+          <p class="lead"><strike>Rs. {{ product.marked_price }}</strike> Rs. {{ product.selling_price }}</p>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-6">
+          <p class="text-info mb-0">Warranty:</p>
+          <p class="text-info">{{ product.warranty }}</p>
+        </div>
+        <div class="col-6">
+          <a href="{% url 'ecomapp:addtocart' product.id %}" class="btn btn-success float-end">
+            Add to Cart
+          </a>
+        </div>
+      </div>
       <p class="card-text">{{ product.description }}</p>
       <hr>
 
       <h4 class="mb-4">Reviews</h4>
 
-      {% if reviews %}
-        <div class="list-group mb-3">
-          {% for review in reviews %}
-            <div class="list-group-item">
-              <h5 class="mb-0">{{ review.title }}</h5>
-              <p class="mb-0">
-                <strong>{{ review.user.username }}:</strong>
-                {{ review.text }}
-              </p>
-              <small class="text-muted">
-                Rating: {{ review.rating }}
-                <br>
-                Created at: {{ review.created_at }}
-                <br>
-                Updated at: {{ review.updated_at }}
-              </small>
-            </div>
-          {% endfor %}
-        </div>
-      {% else %}
-        <p>No reviews yet.</p>
-      {% endif %}
-
       {% if user.is_authenticated %}
+        {% if reviews %}
+          <div class="list-group mb-3">
+            {% for review in reviews %}
+              <div class="list-group-item">
+                <h5 class="mb-0">{{ review.title }}</h5>
+                <p class="mb-0">
+                  <strong>{{ review.user.username }}:</strong>
+                  {{ review.text }}
+                </p>
+                <small class="text-muted">
+                  Rating: {{ review.rating }}
+                  <br>
+                  Created at: {{ review.created_at }}
+                  <br>
+                  Updated at: {{ review.updated_at }}
+                </small>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p>No reviews yet.</p>
+        {% endif %}
+
         <a href="{% url 'ecomapp:add_review' slug=product.slug %}" class="btn btn-primary">Add a review</a>
       {% else %}
         <p>Please <a href="{% url 'ecomapp:customerlogin' %}">log in</a> to add a review.</p>
       {% endif %}
-
-      <hr>
-      <a href="{% url 'ecomapp:addtocart' product.id %}" class="btn btn-success">
-        Add to Cart
-      </a>
-      {% comment %} <a href="{% url 'ecomapp:shop' %}" class="btn btn-secondary ml-2">
-        Continue Shopping
-      </a> {% endcomment %}
     </div>
   </div>
-</div>
-
-{% endblock body %}
+  
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <h4 class="mb-4">Other Products in {{ product.category }}</h>
+        <div class="row">
+          {% for other_product in other_products %}
+            <div class="col-md-4">
+              <div class="card mb-4">
+                <img src="{{ other_product.image.url }}" class="img-fluid" style="height: 100px; object-fit: contain;" alt="{{ other_product.title }}">
+                <div class="card-body">
+                  <h5 class="card-title">{{ other_product.title }}</h5>
+                  <p class="card-text">
+                    <strong>Price:</strong> Rs. {{ other_product.selling_price }}
+                  </p>
+                  <a href="{% url 'ecomapp:product_detail' slug=other_product.slug %}" class="btn btn-primary">View Details</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock body %}
+  
