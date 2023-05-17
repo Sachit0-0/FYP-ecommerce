@@ -103,6 +103,7 @@ def productdetail(request, slug):
         'reviews': reviews,
         'form': form,
         'other_products': other_products,
+        'is_new': product.is_new,
     }
     return render(request, 'productdetail.html', context)
 

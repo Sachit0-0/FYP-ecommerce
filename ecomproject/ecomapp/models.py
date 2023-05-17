@@ -35,17 +35,19 @@ class Category(models.Model):
 class Product(models.Model):
     title = models.CharField(max_length=200, null=True)
     slug = models.SlugField(max_length=200, unique=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE )
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField(max_length=500, blank=True)
     marked_price = models.IntegerField()
     selling_price = models.IntegerField()
     image = models.ImageField(upload_to='products')
     view_count = models.PositiveIntegerField(default=0)
     warranty = models.CharField(max_length=300, null=True, blank=True)
+    is_new = models.BooleanField(default=True)  # New field for specifying if the product is new or used
+
     def get_rating(self):
         reviews = self.reviews.all()
         if reviews:
-            return sum([review.rating for review in reviews])/len(reviews)
+            return sum([review.rating for review in reviews]) / len(reviews)
         return 0
 
     def __str__(self):
@@ -53,6 +55,7 @@ class Product(models.Model):
 
     class Meta:
         ordering = ['-id']
+
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
