@@ -2,8 +2,6 @@ from django import forms
 from .models import Order, Customer, Product
 from django.contrib.auth.models import User
 from .models import Product, Review
-from django import forms
-from .models import Review
 class CheckoutForm(forms.ModelForm):
     class Meta:
         model = Order

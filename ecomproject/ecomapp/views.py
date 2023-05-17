@@ -8,31 +8,39 @@ from django.urls import reverse_lazy, reverse
 from django.db.models import Q
 import requests
 from django.shortcuts import render, get_object_or_404
-from .forms import ReviewForm
-from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, TemplateView, CreateView, FormView, DetailView, ListView
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, reverse
-from django.core.paginator import Paginator
-from .utils import password_reset_token
-from django.core.mail import send_mail
 from django.http import JsonResponse
+from django.urls import reverse_lazy, reverse
+from django.contrib import messages
+from django.core.mail import send_mail
 from django.conf import settings
 from django.db.models import Q
-from .models import *
-from .forms import *
 import requests
 
-class EcomMixin(object):
+from .models import *
+from .forms import (
+    CheckoutForm, 
+    CustomerRegistrationForm, 
+    CustomerLoginForm, 
+    ProductForm, 
+    PasswordResetForm, 
+    PasswordForgotForm,
+    ReviewForm
+)
+from .utils import password_reset_token
+
+
+class EcomMixin:
     def dispatch(self, request, *args, **kwargs):
         cart_id = request.session.get("cart_id")
-        if cart_id:
+        if cart_id and request.user.is_authenticated and request.user.customer:
             cart_obj = Cart.objects.get(id=cart_id)
-            if request.user.is_authenticated and request.user.customer:
-                cart_obj.customer = request.user.customer
-                cart_obj.save()
+            cart_obj.customer = request.user.customer
+            cart_obj.save()
         return super().dispatch(request, *args, **kwargs)
+
 
 
 class HomeView(EcomMixin,TemplateView):
