@@ -4,7 +4,7 @@
 
 {% block title %}ProductDetail{% endblock title %}
 
-{% block body %} 
+{% block body %}
 <div class="container mt-4">
   <div class="row">
     <div class="col-md-5">
@@ -26,6 +26,11 @@
 
     <div class="col-md-7">
       <h2 class="mb-4">{{ product.title }}</h2>
+      {% if product.is_new %}
+        <p class="text-success">Condition: New</p>
+      {% else %}
+        <p class="text-warning">Condition: Used</p>
+      {% endif %}
       <div class="row mb-3">
         <div class="col-6">
           <p class="lead mb-0">Category:</p>
@@ -84,28 +89,27 @@
       {% endif %}
     </div>
   </div>
-  
+
   <div class="row mt-4">
     <div class="col-md-12">
-      <h4 class="mb-4">Other Products in {{ product.category }}</h>
-        <div class="row">
-          {% for other_product in other_products %}
-            <div class="col-md-4">
-              <div class="card mb-4">
-                <img src="{{ other_product.image.url }}" class="img-fluid" style="height: 100px; object-fit: contain;" alt="{{ other_product.title }}">
-                <div class="card-body">
-                  <h5 class="card-title">{{ other_product.title }}</h5>
-                  <p class="card-text">
-                    <strong>Price:</strong> Rs. {{ other_product.selling_price }}
-                  </p>
-                  <a href="{% url 'ecomapp:product_detail' slug=other_product.slug %}" class="btn btn-primary">View Details</a>
-                </div>
+      <h4 class="mb-4">Other Products in {{ product.category }}</h4>
+      <div class="row">
+        {% for other_product in other_products %}
+          <div class="col-md-4">
+            <div class="card mb-4">
+              <img src="{{ other_product.image.url }}" class="img-fluid" style="height: 100px; object-fit: contain;" alt="{{ other_product.title }}">
+              <div class="card-body">
+                <h5 class="card-title">{{ other_product.title }}</h5>
+                <p class="card-text">
+                  <strong>Price:</strong> Rs. {{ other_product.selling_price }}
+                </p>
+                <a href="{% url 'ecomapp:product_detail' slug=other_product.slug %}" class="btn btn-primary">View Details</a>
               </div>
             </div>
-          {% endfor %}
-        </div>
+          </div>
+        {% endfor %}
       </div>
     </div>
   </div>
-  {% endblock body %}
-  
+</div>
+{% endblock body %}
