@@ -84,6 +84,10 @@ def productdetail(request, slug):
     product = get_object_or_404(Product, slug=slug)
     reviews = product.reviews.all()
 
+    # Increment the view count
+    product.view_count += 1
+    product.save()
+
     # Get other products in the same category
     other_products = Product.objects.filter(category=product.category).exclude(slug=slug)[:3]
 
@@ -103,7 +107,6 @@ def productdetail(request, slug):
         'reviews': reviews,
         'form': form,
         'other_products': other_products,
-        'is_new': product.is_new,
     }
     return render(request, 'productdetail.html', context)
 

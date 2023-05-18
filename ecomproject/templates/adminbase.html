@@ -9,14 +9,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    {% comment %} <div class="container">
-        <a href="{% url 'ecomapp:adminhome' %}">Home</a> | 
-        <a href="{% url 'ecomapp:adminorderlist' %}">All Orders</a> | 
-        <a href="{% url 'ecomapp:adminproductlist' %}">All Products</a> | 
-        <a href="{% url 'ecomapp:home' %}" target="_blank">Visit site</a>
-    </div>
-    {% block body %}{% endblock body %} {% endcomment %}
-
 
 
 
@@ -37,24 +29,7 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav w-100 justify-content-evenly p-0">
-              {% comment %} <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Categories
-                </a>
-                <ul class="dropdown-menu">
-                   <li><a href="{% url 'ecomapp:adminhome' %}">Home</a></li>
-                  <li><a class="dropdown-item" href="{% url 'ecomapp:checkout' %}">Check out orders </a></li>
-                  <li>
-                    <a href="{% url 'ecomapp:adminorderlist' %}">All Orders</a>
-                  </li>
-                </ul>
-              </li> {% endcomment %}
+           
               <li class="nav-item">
                 <a class="nav-link active" href="{% url 'ecomapp:adminhome' %}">Home</a>
               </li>
@@ -81,7 +56,7 @@
       </nav>
   
       {% block body %}{% endblock body %}
-  
+      
       <script
         src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"

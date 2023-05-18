@@ -40,14 +40,9 @@
         <div class="col-6">
           <p class="text-info mb-0">Warranty:</p>
           <p class="text-info">{{ product.warranty }}</p>
+          <p class="text-info mb-0">View Count:</p>
+          <p class="text-info">{{ product.view_count }}</p>
         </div>
-        <div class="row mb-3">
-          <div class="col-6">
-            <p class="lead mb-0">Condition:</p>
-            <p class="lead">{% if product.is_new %}New{% else %}Used{% endif %}</p>
-          </div>
-        </div>
-        
         <div class="col-6">
           <a href="{% url 'ecomapp:addtocart' product.id %}" class="btn btn-success float-end">
             Add to Cart

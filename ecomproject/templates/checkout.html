@@ -2,7 +2,6 @@
 {% block title %}Checkout{% endblock title %}
 {% block body %} 
 
-
 <div class="container">
   <br>
   <div class="row">
@@ -37,17 +36,17 @@
       </table>
     </div>
     <div class="col-md-8 col-lg-8 col-xl-4 offset-xl-1">
-    <div class="col-md-6 mx-auto " >
+      <div class="col-md-6 mx-auto">
         <h3>Checkout Form</h3>
-        <Form action="" method="POST">
-            {% csrf_token %}
-            {{form.as_p}}
-            <button class="btn btn-info">Place order</button>
+        <p class="text-warning">Please note: It is highly recommended to physically inspect the product before making a purchase. Ensure the product meets your expectations in terms of condition and suitability.</p>
+        <form action="" method="POST">
+          {% csrf_token %}
+          {{form.as_p}}
+          <button class="btn btn-info">Place order</button>
         </form>
-    
+      </div>
     </div>
   </div>
-  
 </div>
-</div>
+
 {% endblock body %}
